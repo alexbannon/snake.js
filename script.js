@@ -70,7 +70,11 @@ $(document).ready(function(){
         return;
       }
       self.occupiedArray.unshift(cubeToColor);
-      self.colorCube(cubeToColor);
+      var uncolor = self.colorCube(cubeToColor);
+      if(uncolor){
+        self.occupiedArray.push(cubeToUncolor);
+        return;
+      }
       self.uncolorCube(cubeToUncolor);
     };
     this.moveLeft = function() {
@@ -82,7 +86,11 @@ $(document).ready(function(){
         return;
       }
       self.occupiedArray.unshift(cubeToColor);
-      self.colorCube(cubeToColor);
+      var uncolor = self.colorCube(cubeToColor);
+      if(uncolor){
+        self.occupiedArray.push(cubeToUncolor);
+        return;
+      }
       self.uncolorCube(cubeToUncolor);
     };
     this.moveUp = function() {
@@ -94,7 +102,11 @@ $(document).ready(function(){
         return;
       }
       self.occupiedArray.unshift(cubeToColor);
-      self.colorCube(cubeToColor);
+      var uncolor = self.colorCube(cubeToColor);
+      if(uncolor){
+        self.occupiedArray.push(cubeToUncolor);
+        return;
+      }
       self.uncolorCube(cubeToUncolor);
     };
     this.moveDown = function() {
@@ -106,7 +118,11 @@ $(document).ready(function(){
         return;
       }
       self.occupiedArray.unshift(cubeToColor);
-      self.colorCube(cubeToColor);
+      var uncolor = self.colorCube(cubeToColor);
+      if(uncolor){
+        self.occupiedArray.push(cubeToUncolor);
+        return;
+      }
       self.uncolorCube(cubeToUncolor);
     };
     this.gameOver = function() {
@@ -114,6 +130,7 @@ $(document).ready(function(){
       console.log('game over');
     };
     this.colorCube = function(squareLocation) {
+      var worm = false;
       var squareNumber = (squareLocation[1] * 16) + squareLocation[0];
       var currentColor = $('#square-'+squareNumber).css('background-color');
       if(currentColor === 'rgb(0, 0, 0)') {
@@ -122,8 +139,10 @@ $(document).ready(function(){
       }
       if(currentColor === 'rgb(255, 0, 0)') {
         self.ateWorm(squareLocation);
+        worm = true;
       }
       $('#square-'+squareNumber).css('background-color', 'black');
+      return worm;
     };
     this.uncolorCube = function(squareLocation) {
       var squareNumber = (squareLocation[1] * 16) + squareLocation[0];
