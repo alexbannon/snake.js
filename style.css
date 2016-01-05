@@ -24,6 +24,21 @@ html, body {
   line-height: 0px;
 }
 
+#start-button {
+  border-radius: 10px;
+  background-color: rgb(65, 255, 15);
+  text-align: center;
+  font-size: 1.2em;
+  width: 70px;
+  margin: 0 auto 10px auto;
+  -webkit-box-shadow: 0px 0px 60px 2px rgba(65,125,15,1);
+  -moz-box-shadow: 0px 0px 60px 2px rgba(65,125,15,1);
+  box-shadow: 0px 0px 60px 2px rgba(65,125,15,1);
+}
+#start-button:hover {
+  cursor: pointer;
+}
+
 .one-square {
   width: 18px;
   height: 18px;
