@@ -19,7 +19,9 @@ $(document).ready(function(){
     this.occupiedArray = [];
     this.direction = 'right';
     this.gameOn = false;
-    this.speed = 333;
+    this.speed = 133;
+    this.canChangeDirection = true;
+    this.points = 0;
     this.initialize = function() {
       for(var x = self.length - 1; x >= 0; x--) {
         $('#square-'+x).css('background-color', 'black');
@@ -53,6 +55,10 @@ $(document).ready(function(){
       }
     };
     this.changeDirection = function(direction){
+      if(self.canChangeDirection === false){
+        return;
+      }
+      self.canChangeDirection = false;
       self.direction = direction;
     };
     this.moveRight = function() {
@@ -60,10 +66,6 @@ $(document).ready(function(){
       var cubeToUncolor = self.occupiedArray.pop();
       var cubeToColor = [(self.occupiedArray[0][0] + 1), self.occupiedArray[0][1]];
       if((self.occupiedArray[0][0] + 1) > 15) {
-        self.gameOver();
-        return;
-      }
-      if(self.occupiedArray.indexOf(cubeToColor) !== -1){
         self.gameOver();
         return;
       }
@@ -79,10 +81,6 @@ $(document).ready(function(){
         self.gameOver();
         return;
       }
-      if(self.occupiedArray.indexOf(cubeToColor) !== -1){
-        self.gameOver();
-        return;
-      }
       self.occupiedArray.unshift(cubeToColor);
       self.colorCube(cubeToColor);
       self.uncolorCube(cubeToUncolor);
@@ -92,10 +90,6 @@ $(document).ready(function(){
       var cubeToUncolor = self.occupiedArray.pop();
       var cubeToColor = [self.occupiedArray[0][0], (self.occupiedArray[0][1] - 1)];
       if((self.occupiedArray[0][1] + 1) < 0) {
-        self.gameOver();
-        return;
-      }
-      if(self.occupiedArray.indexOf(cubeToColor) !== -1){
         self.gameOver();
         return;
       }
@@ -111,10 +105,6 @@ $(document).ready(function(){
         self.gameOver();
         return;
       }
-      if(self.occupiedArray.indexOf(cubeToColor) !== -1){
-        self.gameOver();
-        return;
-      }
       self.occupiedArray.unshift(cubeToColor);
       self.colorCube(cubeToColor);
       self.uncolorCube(cubeToUncolor);
@@ -125,11 +115,31 @@ $(document).ready(function(){
     };
     this.colorCube = function(squareLocation) {
       var squareNumber = (squareLocation[1] * 16) + squareLocation[0];
+      var currentColor = $('#square-'+squareNumber).css('background-color');
+      if(currentColor === 'rgb(0, 0, 0)') {
+        self.gameOver();
+        return;
+      }
+      if(currentColor === 'rgb(255, 0, 0)') {
+        self.ateWorm(squareLocation);
+      }
       $('#square-'+squareNumber).css('background-color', 'black');
     };
     this.uncolorCube = function(squareLocation) {
       var squareNumber = (squareLocation[1] * 16) + squareLocation[0];
       $('#square-'+squareNumber).css('background-color', 'white');
+      self.canChangeDirection = true;
+    };
+    this.ateWorm = function(){
+      self.points++;
+      $('#points').html(self.points);
+      var randomInt = Math.floor(Math.random() * (304) + 1);
+      var checkSquare = $('#square-'+randomInt).css('background-color');
+      while(checkSquare === 'rgb(255, 0, 0)'){
+        randomInt = Math.floor(Math.random() * (304) + 1);
+        checkSquare = $('#square-'+randomInt).css('background-color');
+      }
+      $('#square-'+randomInt).css('background-color', 'red');
     };
   }
 
@@ -144,7 +154,7 @@ $(document).ready(function(){
         console.log("I'm afraid I can't do that Dave");
       }
       else {
-        setInterval(snake.changeDirection('left'), 332);
+        snake.changeDirection('left');
       }
     }
     else if(e.keyCode == 38) { // up
@@ -152,7 +162,7 @@ $(document).ready(function(){
         console.log("I'm afraid I can't do that Dave");
       }
       else {
-        setInterval(snake.changeDirection('up'), 332);
+        snake.changeDirection('up');
       }
     }
     else if(e.keyCode == 39) { // right
@@ -160,7 +170,7 @@ $(document).ready(function(){
         console.log("I'm afraid I can't do that Dave");
       }
       else {
-        setInterval(snake.changeDirection('right'), 332);
+        snake.changeDirection('right');
       }
     }
     else if(e.keyCode == 40) { // down
@@ -168,7 +178,7 @@ $(document).ready(function(){
         console.log("I'm afraid I can't do that Dave");
       }
       else {
-        setInterval(snake.changeDirection('down'), 332);
+        snake.changeDirection('down');
       }
     }
 
